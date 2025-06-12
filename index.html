@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Jupiter Notebook</title>
-  <link rel="icon" type="image/png" href="logo.png">
+  <title>Simple Video Player</title>
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-    iframe {
-      position: fixed;
-      top: 0;
-      left: 0;
+    video {
       width: 100%;
       height: 100%;
-      border: none;
+      max-height: 100vh;
+      max-width: 100vw;
+      background: #000;
     }
   </style>
 </head>
 <body>
-  <iframe src="https://wynai-jupiter.hf.space/" allowfullscreen></iframe>
+  <video id="player" controls autoplay>
+    <source src="http://100.64.0.2:8080/stream.mp4" type="video/mp4">
+    Trình duyệt của bạn không hỗ trợ video.
+  </video>
 </body>
 </html>
