@@ -1,30 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Simple Video Player</title>
-  <style>
-    body {
-      margin: 0;
-      background-color: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    video {
-      width: 100%;
-      height: 100%;
-      max-height: 100vh;
-      max-width: 100vw;
-      background: #000;
-    }
-  </style>
-</head>
-<body>
-  <video id="player" controls autoplay>
-    <source src="http://100.64.0.2:8080/stream.mp4" type="video/mp4">
-    Trình duyệt của bạn không hỗ trợ video.
-  </video>
-</body>
+<html>
+  <body>
+    <div id="container"></div>
+    <script>
+      async function decryptAndRender() {
+        const ciphertext = "w5Itb5ZApT2/0ar+zqSPaAkBwZd86biXHVbJy51yJMoF6XbqdHz7HUpwbOCc2lrx8tdkxQR4n3ksLWDuGQb/hsgIHaTO7mf6iQm6kGWYzrVZB3LgPWvOUfzTlEUwp/BcamuQ147KCuDdI9154CTn57m4/x9S";
+        const nonce = "L16AuL66QhglA40F+ShBhA==";
+        const tag = "ZeHoAwNR/2VCPY23Gw2wlg==";
+        const key = "yMNk1bB9LzQYZjudwM1EQE5cIm/2GNFk1WWCEom76YE=";
+
+        const cryptoKey = await crypto.subtle.importKey(
+          "raw",
+          Uint8Array.from(atob(key), c => c.charCodeAt(0)),
+          "AES-GCM",
+          false,
+          ["decrypt"]
+        );
+
+        const decrypted = await crypto.subtle.decrypt(
+          {
+            name: "AES-GCM",
+            iv: Uint8Array.from(atob(nonce), c => c.charCodeAt(0)),
+            tagLength: 128
+          },
+          cryptoKey,
+          Uint8Array.from(atob(ciphertext), c => c.charCodeAt(0))
+        );
+
+        const decoder = new TextDecoder();
+        document.getElementById("container").innerHTML = decoder.decode(decrypted);
+      }
+
+      decryptAndRender().catch(console.error);
+    </script>
+  </body>
 </html>
